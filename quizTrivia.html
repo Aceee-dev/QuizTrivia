@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-16">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <script type = "text/javascript" 
+         src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+      </script>
+  <title>Quizzer App</title>
+  <link rel="shortcut icon" href="title_img.jpg" />
+ <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+ <link href="http://fonts.googleapis.com/css?family=Corben:bold" rel="stylesheet" type="text/css">
+ <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
+  <link href="style.css" rel="stylesheet">
+
+</head>
+
+<body background="back.jpg">
+
+<div id="page-wrap" class="before">
+
+  <div id="root">
+
+
+
+ <script>
+ 	var request = new XMLHttpRequest();
+     var data='Global';
+
+request.open('GET', 'https://opentdb.com/api.php?amount=5&type=multiple', true);
+
+request.onload = function () {
+
+  // Begin accessing JSON data here
+ data = JSON.parse(this.response);
+  
+}
+
+request.send();
+
+ </script>
+
+  <p id="ins">
+  	This quiz consists of 5 MCQ of various topics and varying difficulty level and made solely for entertainment purpose.
+  </p>
+  
+   <button id="start" class="myButton center"> Start the quiz </button>
+
+
+
+
+<script type="text/javascript">
+	
+ 
+
+var myLink = document.getElementById('start');
+
+
+var score=0;
+
+$('button').on('click', function() {
+    $(this).prop('disabled', true);
+});
+  
+var shuffle = function (array) {
+
+	var currentIndex = array.length;
+	var temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+
+};
+
+
+$("#start").click(function() {
+  $('.before').toggleClass('after');
+});
+
+myLink.onclick = function(){
+  
+        
+
+	   var i=0;
+	   var l;
+	   if(data['results'] && data['results'].length)
+	      l=data['results'].length;
+
+
+//console.log(data);
+
+	for (i=0;i<l;i++)
+	{
+		var de=data['results'][i]['question'];
+	    var no=(i+1).toString(10);
+	    de=no.concat(" ) ",de);
+
+		       var node = document.createElement("p");                
+			    var textnode = document.createTextNode($.parseHTML(de)[0].textContent);        
+			  node.appendChild(textnode);                            
+			document.getElementById("root").appendChild(node);     
+     var qt=data['results'][i]['type'];
+  
+   var ft;
+      	 ft=document.createElement("div");
+      	ft.setAttribute("class","stitched");
+      if(qt=="multiple")
+      {
+       
+      
+          
+           var opt3=data['results'][i]['correct_answer'];
+            var opt0=data['results'][i]['incorrect_answers'][0];
+             var opt1=data['results'][i]['incorrect_answers'][1];
+              var opt2=data['results'][i]['incorrect_answers'][2];
+            
+            var array=[opt0,opt1,opt2,opt3];
+
+             shuffle(array);
+            
+            var n0=0;
+            var n1=1;
+            var n2=2;
+            var n3=3;
+
+              var id0=n0.toString();
+               var id1=n1.toString();
+                var id2=n2.toString();
+                 var id3=n3.toString();
+
+        id0=id0.concat("",no);
+        id1=id1.concat("",no);
+        id2=id2.concat("",no);
+        id3=id3.concat("",no);
+
+              var x = document.createElement("INPUT");
+            x.setAttribute("type", "radio");
+            x.setAttribute("value",array[0]);
+            
+             x.setAttribute("id",id0);
+           // <label for="dewey">Dewey</label>
+            x.setAttribute("name",no);
+
+            var node = document.createElement("p");                
+			    var textnode = document.createTextNode($.parseHTML(array[0])[0].textContent);        
+			  node.appendChild(textnode);                            
+			 
+            //defaultValue
+           
+            var y = document.createElement("INPUT");
+            y.setAttribute("type", "radio");
+ 			
+              y.setAttribute("value",array[1]);
+               y.setAttribute("name",no);
+                y.setAttribute("id",id1);
+
+                var node3 = document.createElement("p");                
+			    var textnode3 = document.createTextNode($.parseHTML(array[1])[0].textContent);        
+			  node3.appendChild(textnode3);                            
+			
+            var z = document.createElement("INPUT");
+            z.setAttribute("type", "radio");
+             z.setAttribute("value",array[2]);
+             		
+             		  z.setAttribute("name",no);
+             		   z.setAttribute("id",id2);
+
+             		   var node1 = document.createElement("p");                
+			    var textnode1 = document.createTextNode($.parseHTML(array[2])[0].textContent);        
+			  node1.appendChild(textnode1);                            
+			
+
+            var w = document.createElement("INPUT");
+            w.setAttribute("type", "radio");
+             w.setAttribute("value",array[3]);
+ 		
+ 			 w.setAttribute("name",no);
+ 			  w.setAttribute("id",id3);
+
+ 			  var node2 = document.createElement("p");                
+			    var textnode2 = document.createTextNode($.parseHTML(array[3])[0].textContent);        
+			  node2.appendChild(textnode2);                            
+			
+
+            ft.appendChild(x);
+            ft.appendChild(node); 
+            ft.appendChild(y);
+            ft.appendChild(node3); 
+            ft.appendChild(z);
+            ft.appendChild(node1); 
+           ft.appendChild(w);
+            ft.appendChild(node2); 
+
+            document.getElementById("root").appendChild(ft);
+
+          
+          
+       }
+     
+   
+	}
+
+	var button = document.createElement("button");
+     button.innerHTML = "Submit";
+     button.setAttribute("class","myButton");
+     button.setAttribute("id","center");
+// 2. Append somewhere
+var body = document.getElementById("root");
+body.appendChild(button);
+
+
+ 
+
+ $('button').on('click', function(e) {
+    
+
+     var j;
+ 	 for(j=0;j<l;++j)
+ 	 {
+ 	 	  var corr=data['results'][j]['correct_answer'];
+ 	 	  var sel;
+ 	 	  var df=(j+1).toString(10);
+
+ 	 var rates = document.getElementsByName(df);
+
+for(var k = 0; k < rates.length; k++){
+	//console.log("hi");
+    if(rates[k].checked){
+       sel=rates[k].value;
+       break;
+    }
+
+
+}
+
+ 	 	  // console.log($.parseHTML(corr)[0].textContent);
+ 	 	  // console.log(sel);
+ 	 	  if(corr==sel)
+ 	 	  {
+               score++;
+ 	 	  }
+ 	 }
+
+ var stat = "Your score is ";
+ stat=stat.concat("",score.toString(10));
+ 	 alert(stat);
+
+   $(this).prop('disabled', true);
+
+ });
+
+ //console.log(data);
+}
+
+
+
+</script>
+
+</div>
+</div>
+</body>
+
+</html>
